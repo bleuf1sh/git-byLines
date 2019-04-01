@@ -58,7 +58,13 @@ def addTagsToCommit(commit_hash, tags_to_add):
   uBelt.log('addTagsToCommit() ' + commit_hash + ': ' + str(tags_to_add))
   if len(tags_to_add) < 1:
     return
-    
+  
+  print('Tags: ' + str(tags_to_add))
+  selected_input = uBelt.getInput('Confirm the above tag? [y/n]: ')
+  if selected_input.lower().startswith('n'):
+    print('Tagging Aborted!')
+    return
+
   commit_message = uGit.getGitCommitMessage(commit_hash)
   # Attempt to detect existing newline char
   if commit_message.find('\r\n'):
