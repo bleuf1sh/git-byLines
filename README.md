@@ -2,7 +2,7 @@
 ## Simple and responsive Git addon to track all contributers in a commit message requiring no  special commands
 copy/paste this line into terminal (bash) and run
 ```
-TODO...
+TODO... for later
 ```
 
 
