@@ -36,7 +36,7 @@ def triggerTaggingFlow(config_dict, commit_hash):
     
     print(optional_or + 'write your own tag like: Your Name <your-git-email@github.com>')
     print('')
-    selected_input = uBelt.getInput('Enter your selection [xx to exit]: ')
+    selected_input = uBelt.getInput('Input [xx to exit]: ')
 
     if 'xx' == selected_input.lower():
       isFlowActive = False
