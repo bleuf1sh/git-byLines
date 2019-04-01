@@ -87,7 +87,6 @@ def addTagsToCommit(commit_hash, tags_to_add):
       commit_message = commit_message + new_line_character + prefix_with_tag
 
   # Ammend the commit
-  uBelt.IS_VERBOSE_LOGGING_ENABLED = True
   uGit.ammendCommitMessage(commit_message)
 
 
