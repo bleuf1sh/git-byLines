@@ -1,9 +1,8 @@
-# git-team-tag
-## Simple and responsive Git addon to capture all contributers in a commit message requiring no  special commands
+# git-commit-n-tag
+## Simple and responsive Git addon to track all contributers in a commit message requiring no  special commands
 copy/paste this line into terminal (bash) and run
 ```
-UPDATE THIS
-curl -sL "https://raw.githubusercontent.com/bleuf1sh/setup-dev-mac/master/setupBase.sh?$(date +%s)" > setupBase.sh && bash setupBase.sh start
+TODO...
 ```
 
 
@@ -12,12 +11,8 @@ There are no specific commands to remember or configurations to setup before use
 The code is activated upon any "git commit" command within any git repo.
 
 ## How does it work?
-git-team-tag overloads the git command via shell alias.
+git-commit-n-tag overloads the git command via shell alias.
 
-
-</br>
-
-## Name brainstormed with Coby and Alyssa
 
 </br>
 
@@ -26,10 +21,14 @@ git-team-tag overloads the git command via shell alias.
 - https://github.com/kejadlen/git-together
 - https://github.com/pivotal/git_scripts
 - https://github.com/git-duet/git-duet
-</br></br></br></br></br></br>
+</br></br>
 
 
+######## BACKLOG ##########
+- Add dedicated manual activation
+- Quick option for most recently used tags (specific to the machine)
 
+</br></br></br></br>
 ```
 # MIT License
 

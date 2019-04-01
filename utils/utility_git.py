@@ -1,6 +1,11 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import utils.utility_belt as uBelt
 
+def ammendCommitMessage(new_commit_message):
+  output = uBelt.getOutputExecutingShellCommands(['git', 'commit', '--ammend', '-m "' + new_commit_message + '"'])
+  uBelt.log('ammendCommitMessage() got:' + output, isVerbose=True)
+  return output
+
 def getGitTopLevelDir():
   output = uBelt.getOutputExecutingShellCommands(['git', 'rev-parse', '--show-toplevel'])
   uBelt.log('getGitTopLevelDir() got:' + output, isVerbose=True)

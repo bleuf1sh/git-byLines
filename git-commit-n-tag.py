@@ -1,97 +1,110 @@
 #!/usr/bin/env python3
+# coding: utf-8
 from __future__ import absolute_import, division, print_function, unicode_literals
 import utils.utility_belt as uBelt
 import utils.utility_git as uGit
-import sys
-import os.path
-
-### Python 2/3
-try:
-    input = raw_input
-except NameError:
-    pass
-try:
-  import simplejson as json
-except (ImportError, SyntaxError):
-  import json
-#######################
-
-uBelt.IS_VERBOSE_LOGGING_ENABLED = True
-
-COMMIT_N_TAG_CONFIG_JSON_FILE_NAME = 'commit-n-tag.config.json'
-
-COMMIT_N_TAG_CONFIG_DICT_STARTER = dict(
-  enabled=True,
-  tags=[ ]
-)
-
-def getConfigFilePath(repo_level=True):
-  return os.path.join(uGit.getGitTopLevelDir(), COMMIT_N_TAG_CONFIG_JSON_FILE_NAME)
-
-def doesConfigFileExist(repo_level=True):
-  return os.path.isfile(getConfigFilePath())
-
-def writeConfigDictToJson(config_dict, file=None, file_path=None):
-  if file is None and file_path is None:
-    raise ValueError('writeConfigDictToJson() Missing Required field: "file" or "file_path" must be provided')
-
-  if file is not None:
-    json.dump(config_dict, fp=file, indent=2)
-  else:
-    with open(getConfigFilePath(), mode='w') as autograph_config_json_file:
-      uBelt.log('writeConfigDictToJson... Preparing Json')
-      json.dump(config_dict, fp=autograph_config_json_file, indent=2)
-      uBelt.log('writeConfigDictToJson... Wrote Json')
-
-def getConfigJsonToDict(repo_level=True):
-  config_file_path = getConfigFilePath()
-  uBelt.log('getConfigJsonToDict... Loading Dict from:' + config_file_path, isVerbose=True)
-
-  config_dict = None
-  try:
-    with open(config_file_path, mode='r') as config_json_file:
-      config_dict = json.load(config_json_file)
-      uBelt.log('getConfigJsonToDict... Loaded Dict', isVerbose=True)
-  except Exception:
-    config_dict = None
-  
-  if config_dict is None:
-    uBelt.log('getConfigJsonToDict... No Dict Found', isVerbose=True)
-    config_dict = COMMIT_N_TAG_CONFIG_DICT_STARTER.copy()
-    writeConfigDictToJson(config_dict, file_path=config_file_path)
-    os.chmod(config_file_path, 0o777)
-    uBelt.log('getConfigJsonToDict... Creating Dict Done', isVerbose=True)
-
-  return config_dict
+import utils.utility_config as uConfig
+from sys import argv as sys_argv, version as sys_version
+from string import ascii_lowercase
+from os import linesep as os_linesep
 
 
-def promptToAddTagToConfig():
-  print('Tags look like "Your Name <your-git-email@github.com>"')
-  incoming = input('Enter a new tag: ')
-  return str(incoming)
 
-def triggerTaggingFlow(commit_hash):
+def triggerTaggingFlow(config_dict, commit_hash):
   uBelt.log('triggerTaggingFlow() ' + commit_hash, isVerbose=True)
-  # while(True):
+  selected_tags = []
+  isFlowActive = True
+  while(isFlowActive):
+    print('¸.·´¯`·.¸><(((º>')
+    print("Git Commit'n'Tag makes it easy to add 'n' tags to commit " + commit_hash)
+    print('¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>')
+    if len(selected_tags) > 0:
+      print('')
+      print('Tags currently staged to add to commit: ')
+      print(selected_tags)
+    
+    optional_or = ''
+    tags = sorted(config_dict['tags'])
+    if len(tags) > 0:
+      optional_or = 'or '
+      print('')
+      print('Enter the letter associated with a previosly used tag to add')
+      abc_list = list(ascii_lowercase)
+      for tag in tags:
+        print('  ' + abc_list.pop(0) + ') ' + tag)
+        print('')
+    
+    print(optional_or + 'write your own tag like: Your Name <your-git-email@github.com>')
+    print('')
+    selected_input = uBelt.getInput('Enter your selection [xx to exit]: ')
+
+    if 'xx' == selected_input.lower():
+      isFlowActive = False
+    elif len(selected_input) < 3:
+      tag_index = ascii_lowercase.find(selected_input.lower()[0])
+      try:
+        tag = tags[tag_index]
+        selected_tags.append(tag)
+      except IndexError:
+        uBelt.log("Tag selection unknown, please try again or exit")
+    else:
+      config_dict["tags"].append(selected_input)
+      selected_tags.append(selected_input)
+  
+  return config_dict, selected_tags
+
+
+def addTagsToCommit(commit_hash, tags_to_add):
+  uBelt.log('addTagsToCommit() ' + commit_hash + ': ' + str(tags_to_add))
+  if len(tags_to_add) < 1:
+    return
+    
+  commit_message = uGit.getGitCommitMessage(commit_hash)
+  # Attempt to detect existing newline char
+  if commit_message.find('\r\n'):
+    new_line_character = '\r\n'
+  elif commit_message.find('\n'):
+    new_line_character = '\n'
+  else:
+    new_line_character = os_linesep
+
+  # Attempt to detect if Author or Co
+  if len(tags_to_add) > 1 or commit_message.lower().find('authored-by: ') > 1:
+    tag_prefix = 'Co-authored-by: '
+  else:
+    tag_prefix = 'Authored-by: '
+
+  # Add the tags to the message
+  for tag in tags_to_add:
+    prefix_with_tag = tag_prefix + tag
+    if commit_message.find(prefix_with_tag) == -1:
+      commit_message = commit_message + new_line_character + prefix_with_tag
+
+  # Ammend the commit
+  uBelt.IS_VERBOSE_LOGGING_ENABLED = True
+  uGit.ammendCommitMessage(commit_message)
+
 
 
 def main(args):
-  config_dict = getConfigJsonToDict()
+  config_dict = uConfig.getConfigJsonToDict()
+  if config_dict['enabled'] is False:
+    uBelt.log("Git Commit'n'Tag is disabled", isVerbose=True)
+    return
+
   last_commit_hash = uGit.getGitCommitHash()
-  # if (uBelt.getCurrentTimeEpochMs() - uGit.getGitCommitEpochMs(last_commit_hash)) >= 10000:
-  #   triggerTaggingFlow(last_commit_hash)
+  if True or (uBelt.getCurrentTimeEpochMs() - uGit.getGitCommitEpochMs(last_commit_hash)) >= 10000:
+    config_dict, selected_tags = triggerTaggingFlow(config_dict, last_commit_hash)
+    uConfig.writeConfigDictToJson(config_dict, file_path=uConfig.getConfigFilePath())
 
-  uBelt.log(last_commit_hash)
-  uBelt.log(uGit.getGitCommitHash())
-  uBelt.log(uGit.getGitCommitEpochMs(last_commit_hash))
-  uBelt.log(uGit.getGitCommitMessage(last_commit_hash))
+    addTagsToCommit(last_commit_hash, selected_tags)
 
 
 
-
+# uBelt.IS_VERBOSE_LOGGING_ENABLED = True
 if __name__ == "__main__":
-  uBelt.log('Python Version:' + sys.version, isVerbose=True)
-  args = sys.argv
+  uBelt.log('Python Version:' + sys_version, isVerbose=True)
+  args = sys_argv
   uBelt.log('ARGS:' + str(args), isVerbose=True)
 
   if len(args) < 2:
@@ -100,17 +113,10 @@ if __name__ == "__main__":
   switch_arg = args[1].lower().strip()
   uBelt.log('SwitchArg:' + switch_arg, isVerbose=True)
 
-  if 'commit' is switch_arg:
+  if 'commit' == switch_arg:
     main(args)
-  if 'status' is switch_arg:
+  if 'status' == switch_arg: # This may need to be removed
     main(args)
 
 
 
-
-
-
-
-
-######## BACKLOG ##########
-# Quick option for most recently used autographs (specific to the machine)
