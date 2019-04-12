@@ -2,8 +2,11 @@
 .DS_Store
 
 # VS Code
-.vscode
+.vscodegit
 
 # Python
 *.pyc
 __pycache__
+
+# Project Specific
+local_pip

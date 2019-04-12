@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import utils.utility_belt as uBelt
 
 def ammendCommitMessage(new_commit_message):
-  output = uBelt.getOutputExecutingShellCommands(['git', 'commit', '--amend', '-m "' + new_commit_message + '"'])
+  output = uBelt.getOutputExecutingShellCommands(['git', 'commit', '--amend', '-m ' + new_commit_message])
   uBelt.log('ammendCommitMessage() got:' + output, isVerbose=True)
   return output
 

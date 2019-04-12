@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 from __future__ import absolute_import, division, print_function, unicode_literals
+from local_pip.colorama import init as coloramaInit, Fore as txtColor , Back as txtColorBack, Style as txtStyle
 import utils.utility_belt as uBelt
 import utils.utility_git as uGit
 import utils.utility_config as uConfig
@@ -10,47 +11,79 @@ from os import linesep as os_linesep
 
 
 
+def main(args):
+  config_dict = uConfig.getConfigJsonToDict()
+  if config_dict['enabled'] is False:
+    uBelt.log("Git Commit'n'Tag is disabled", isVerbose=True)
+    return
+
+  last_commit_hash = uGit.getGitCommitHash()
+  if True or (uBelt.getCurrentTimeEpochMs() - uGit.getGitCommitEpochMs(last_commit_hash)) >= 10000:
+    config_dict, selected_tags = triggerTaggingFlow(config_dict, last_commit_hash)
+    uConfig.writeConfigDictToJson(config_dict, file_path=uConfig.getConfigFilePath())
+
+    addTagsToCommit(last_commit_hash, selected_tags)
+
+
 def triggerTaggingFlow(config_dict, commit_hash):
+  coloramaInit()
+  up_fish = '´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·><(((º>'
+  dn_fish = '¸.·´¯`·.¸¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.><(((º>'
+  sm_fish = '´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.><(((º>'
+
   uBelt.log('triggerTaggingFlow() ' + commit_hash, isVerbose=True)
+  print(os_linesep + os_linesep + os_linesep)
+  print('last commit:' + commit_hash)
+  print(txtColorBack.BLUE + txtColor.WHITE)
+  print(up_fish)
+  print("Git Commit'n'Tag makes it easy to add N tags the most recent commit")
+  print(dn_fish)
+  
   selected_tags = []
   isFlowActive = True
+  tags = sorted(config_dict['tags'])
   while(isFlowActive):
-    print('¸.·´¯`·.¸><(((º>')
-    print("Git Commit'n'Tag makes it easy to add 'n' tags to commit " + commit_hash)
-    print('¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>')
-    if len(selected_tags) > 0:
-      print('')
-      print('Tags currently staged to add to commit: ')
-      print(selected_tags)
-    
-    optional_or = ''
-    tags = sorted(config_dict['tags'])
+    select_tag_prompt = ''
     if len(tags) > 0:
-      optional_or = 'or '
-      print('')
-      print('Enter the letter associated with a previosly used tag to add')
+      select_tag_prompt = 'Select a tag by letter or '
+      print('Enter the letter to select a tag:')
       abc_list = list(ascii_lowercase)
       for tag in tags:
-        print('  ' + abc_list.pop(0) + ') ' + tag)
-        print('')
+        if selected_tags.index(tag):
+          print(txtColor.LIGHTGREEN_EX + ' ✔ ' + abc_list.pop(0) + ') ' + tag + os_linesep)
+        else:
+          print(txtColor.LIGHTWHITE_EX + '   ' + abc_list.pop(0) + ') ' + tag + os_linesep)
     
-    print(optional_or + 'write your own tag like: Your Name <your-git-email@github.com>')
-    print('')
-    selected_input = uBelt.getInput('Input [xx to exit]: ')
-
-    if 'xx' == selected_input.lower():
+    print(txtColor.WHITE + select_tag_prompt + 'Write a new tag like ' + txtColor.YELLOW + 'Your Name <git-email@github.com>')
+    print(txtColor.BLACK + ':q quits  :a ammends commit' + os_linesep)
+    selected_input = uBelt.getInput(txtColor.WHITE + '-> ').strip()
+    if '' == selected_input:
+      continue 
+    if ':q' == selected_input.lower():
+      exit(0)
+    if ':w' == selected_input.lower():
       isFlowActive = False
     elif len(selected_input) < 3:
       tag_index = ascii_lowercase.find(selected_input.lower()[0])
       try:
         tag = tags[tag_index]
-        selected_tags.append(tag)
+        if tag in selected_tags:
+          selected_tags.remove(tag)
+        else:
+          selected_tags.append(tag)
       except IndexError:
         uBelt.log("Tag selection unknown, please try again or exit")
     else:
-      config_dict["tags"].append(selected_input)
+      tags.append(selected_input)
       selected_tags.append(selected_input)
+    
+    print(sm_fish + os_linesep)
   
+  # Update config with any newly added tags
+  for selected_tag in selected_tags:
+    if selected_tag not in config_dict["tags"]:
+      config_dict["tags"].append(selected_tag)
+
   return config_dict, selected_tags
 
 
@@ -89,20 +122,6 @@ def addTagsToCommit(commit_hash, tags_to_add):
   # Ammend the commit
   uGit.ammendCommitMessage(commit_message)
 
-
-
-def main(args):
-  config_dict = uConfig.getConfigJsonToDict()
-  if config_dict['enabled'] is False:
-    uBelt.log("Git Commit'n'Tag is disabled", isVerbose=True)
-    return
-
-  last_commit_hash = uGit.getGitCommitHash()
-  if True or (uBelt.getCurrentTimeEpochMs() - uGit.getGitCommitEpochMs(last_commit_hash)) >= 10000:
-    config_dict, selected_tags = triggerTaggingFlow(config_dict, last_commit_hash)
-    uConfig.writeConfigDictToJson(config_dict, file_path=uConfig.getConfigFilePath())
-
-    addTagsToCommit(last_commit_hash, selected_tags)
 
 
 

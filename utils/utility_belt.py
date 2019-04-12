@@ -9,7 +9,6 @@ except NameError:
     pass
 #######################
 
-
 IS_VERBOSE_LOGGING_ENABLED = False
 
 def log(text, isVerbose=False):
