@@ -20,6 +20,7 @@ def main(args):
   last_commit_hash = uGit.getGitCommitHash()
   if True or (uBelt.getCurrentTimeEpochMs() - uGit.getGitCommitEpochMs(last_commit_hash)) >= 10000:
     config_dict, selected_tags = triggerTaggingFlow(config_dict, last_commit_hash)
+    
     uConfig.writeConfigDictToJson(config_dict, file_path=uConfig.getConfigFilePath())
 
     addTagsToCommit(last_commit_hash, selected_tags)
@@ -34,7 +35,7 @@ def triggerTaggingFlow(config_dict, commit_hash):
   uBelt.log('triggerTaggingFlow() ' + commit_hash, isVerbose=True)
   print(os_linesep + os_linesep + os_linesep)
   print('last commit:' + commit_hash)
-  print(txtColorBack.BLUE + txtColor.WHITE)
+  print(reset_colors())
   print(up_fish)
   print("Git Commit'n'Tag makes it easy to add N tags the most recent commit")
   print(dn_fish)
@@ -49,19 +50,19 @@ def triggerTaggingFlow(config_dict, commit_hash):
       print('Enter the letter to select a tag:')
       abc_list = list(ascii_lowercase)
       for tag in tags:
-        if selected_tags.index(tag):
-          print(txtColor.LIGHTGREEN_EX + ' ✔ ' + abc_list.pop(0) + ') ' + tag + os_linesep)
+        if tag in selected_tags:
+          print(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.BRIGHT + '  ✔' + ' (' + abc_list.pop(0) + ') ' + tag + os_linesep)
         else:
-          print(txtColor.LIGHTWHITE_EX + '   ' + abc_list.pop(0) + ') ' + tag + os_linesep)
+          print(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.NORMAL + '   ' + ' (' + abc_list.pop(0) + ') ' + tag + os_linesep)
     
-    print(txtColor.WHITE + select_tag_prompt + 'Write a new tag like ' + txtColor.YELLOW + 'Your Name <git-email@github.com>')
-    print(txtColor.BLACK + ':q quits  :a ammends commit' + os_linesep)
-    selected_input = uBelt.getInput(txtColor.WHITE + '-> ').strip()
+    print(reset_colors() + select_tag_prompt + 'Write a new tag like ' + txtStyle.BRIGHT + 'Your Name <git-email@github.com>' + reset_colors())
+    print(txtStyle.DIM + txtColor.BLACK + ':q quits  :a ammends commit' + os_linesep)
+    selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
     if '' == selected_input:
       continue 
     if ':q' == selected_input.lower():
       exit(0)
-    if ':w' == selected_input.lower():
+    if ':a' == selected_input.lower():
       isFlowActive = False
     elif len(selected_input) < 3:
       tag_index = ascii_lowercase.find(selected_input.lower()[0])
@@ -72,7 +73,7 @@ def triggerTaggingFlow(config_dict, commit_hash):
         else:
           selected_tags.append(tag)
       except IndexError:
-        uBelt.log("Tag selection unknown, please try again or exit")
+        show_warning('Tag selection unknown, please try again or exit')
     else:
       tags.append(selected_input)
       selected_tags.append(selected_input)
@@ -88,16 +89,28 @@ def triggerTaggingFlow(config_dict, commit_hash):
 
 
 def addTagsToCommit(commit_hash, tags_to_add):
-  uBelt.log('addTagsToCommit() ' + commit_hash + ': ' + str(tags_to_add))
+  uBelt.log('addTagsToCommit() ' + commit_hash + ': ' + str(tags_to_add), isVerbose=True)
   if len(tags_to_add) < 1:
+    show_warning('No tags selected to ammend to commit')
     return
   
-  print('Tags: ' + str(tags_to_add))
-  selected_input = uBelt.getInput('Confirm the above tag? [y/n]: ')
+  ammended_commit_message = createAmmendedCommitMessage(commit_hash, tags_to_add)
+  print(reset_colors() + txtStyle.BRIGHT + txtColor.WHITE)
+  print('Commit message after ammendement:')
+  print(reset_colors() + txtStyle.NORMAL + txtColor.LIGHTYELLOW_EX)
+
+  print(ammended_commit_message)
+  print(reset_colors())
+  selected_input = uBelt.getInput('Confirm the ammended commit message above? [y/n]: ')
   if selected_input.lower().startswith('n'):
-    print('Tagging Aborted!')
+    show_warning('Ammend aborted')
     return
 
+  # Ammend the commit
+  uGit.ammendCommitMessage(ammended_commit_message)
+  print('DONE')
+
+def createAmmendedCommitMessage(commit_hash, tags_to_add):
   commit_message = uGit.getGitCommitMessage(commit_hash)
   # Attempt to detect existing newline char
   if commit_message.find('\r\n'):
@@ -106,6 +119,8 @@ def addTagsToCommit(commit_hash, tags_to_add):
     new_line_character = '\n'
   else:
     new_line_character = os_linesep
+
+  commit_message = commit_message + new_line_character
 
   # Attempt to detect if Author or Co
   if len(tags_to_add) > 1 or commit_message.lower().find('authored-by: ') > 1:
@@ -116,16 +131,19 @@ def addTagsToCommit(commit_hash, tags_to_add):
   # Add the tags to the message
   for tag in tags_to_add:
     prefix_with_tag = tag_prefix + tag
-    if commit_message.find(prefix_with_tag) == -1:
+    if commit_message.find(tag) == -1:
       commit_message = commit_message + new_line_character + prefix_with_tag
-
-  # Ammend the commit
-  uGit.ammendCommitMessage(commit_message)
-
+  
+  return commit_message
 
 
+def reset_colors():
+  return txtStyle.RESET_ALL + txtColorBack.BLUE + txtColor.WHITE
 
-# uBelt.IS_VERBOSE_LOGGING_ENABLED = True
+def show_warning(txt):
+  uBelt.log(reset_colors() + txtColor.LIGHTRED_EX + '!!! ' + txt + ' !!!' + reset_colors())
+
+
 if __name__ == "__main__":
   uBelt.log('Python Version:' + sys_version, isVerbose=True)
   args = sys_argv
