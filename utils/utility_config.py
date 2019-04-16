@@ -9,16 +9,16 @@ except (ImportError, SyntaxError):
   import json
 #######################
 
-COMMIT_N_TAG_CONFIG_JSON_FILE_NAME = 'commit-n-tag.config.json'
+BYLINES_CONFIG_JSON_FILE_NAME = '.config.byLines.json'
 
-COMMIT_N_TAG_CONFIG_DICT_STARTER = dict(
+BYLINES_CONFIG_DICT_STARTER = dict(
   enabled=True,
-  tags=[ ]
+  byLines=[ ]
 )
 
 
 def getConfigFilePath(repo_level=True):
-  return os_path.join(uGit.getGitTopLevelDir(), COMMIT_N_TAG_CONFIG_JSON_FILE_NAME)
+  return os_path.join(uGit.getGitTopLevelDir(), BYLINES_CONFIG_JSON_FILE_NAME)
 
 def doesConfigFileExist(repo_level=True):
   return os_path.isfile(getConfigFilePath())
@@ -49,7 +49,7 @@ def getConfigJsonToDict(repo_level=True):
   
   if config_dict is None:
     uBelt.log('getConfigJsonToDict... No Dict Found', isVerbose=True)
-    config_dict = COMMIT_N_TAG_CONFIG_DICT_STARTER.copy()
+    config_dict = BYLINES_CONFIG_DICT_STARTER.copy()
     writeConfigDictToJson(config_dict, file_path=config_file_path)
     os_chmod(config_file_path, 0o777)
     uBelt.log('getConfigJsonToDict... Creating Dict Done', isVerbose=True)

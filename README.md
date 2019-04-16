@@ -1,5 +1,5 @@
-# git-commit-n-tag
-## Simple and responsive Git addon to track all contributers in a commit message requiring no  special commands
+# git-byLines
+## Simple and responsive Git tool to add all contributers into a commit message requiring no special commands
 copy/paste this line into terminal (bash) and run
 ```
 TODO... for later
@@ -11,7 +11,7 @@ There are no specific commands to remember or configurations to setup before use
 The code is activated upon any "git commit" command within any git repo.
 
 ## How does it work?
-git-commit-n-tag overloads the git command via shell alias.
+git-byLines overloads the git command via shell alias.
 
 
 </br>
@@ -26,7 +26,7 @@ git-commit-n-tag overloads the git command via shell alias.
 
 ######## BACKLOG ##########
 - Add dedicated manual activation
-- Quick option for most recently used tags (specific to the machine)
+- Quick option for most recently used byLines (specific to the machine)
 
 </br></br></br></br>
 ```
