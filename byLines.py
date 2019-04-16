@@ -35,8 +35,8 @@ def triggerByLineWorkFlow(config_dict, commit_hash):
 
   uBelt.log('triggerByLineWorkFlow() ' + commit_hash, isVerbose=True)
   print(os_linesep + os_linesep + os_linesep)
-  print('last commit:' + commit_hash)
-  print(reset_colors() + os_linesep)
+  print('last commit:' + commit_hash + reset_colors())
+  print(os_linesep)
   print(up_fish)
   print("git-byLines makes it easy to add byLines to the most recent local commit")
   print(dn_fish)
