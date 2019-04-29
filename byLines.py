@@ -79,7 +79,7 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
     
     cliPrint(reset_colors())
     cliPrint(reset_colors() + select_byline_prompt + 'Type a new byLine like ' + txtStyle.BRIGHT + 'Your Name <git-email@github.com>')
-    cliPrint(reset_colors() + txtStyle.DIM + txtColor.BLACK + ':q Quits  :a Ammends commit  :disable Disables byLines')
+    cliPrint(reset_colors() + txtStyle.DIM + txtColor.BLACK + ':q Quit  :a Ammend commit  :disable Disable byLines')
     cliPrint('')
     selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
     if '' == selected_input:
