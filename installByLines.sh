@@ -157,7 +157,7 @@ function install() {
   popd
   echo "Installing Dependencies... Done"
 
-  local path_to_bash_profile="~/.bash_profile"
+  local path_to_bash_profile=~/.bash_profile
   if [ -e $path_to_bash_profile ]; then
     if grep -q "git-byLines" $path_to_bash_profile; then
       echo "git-byLines are already mentioned in $path_to_bash_profile"
@@ -173,8 +173,8 @@ function install() {
     fi
   fi
 
-  local bash_byLines="function byLines() { command $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" }"
-  local bash_git_override="function git() { command git \"\$@\" && $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" }"
+  local bash_byLines="function byLines() { command $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; }"
+  local bash_git_override="function git() { command git \"\$@\" && $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; }"
   addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_byLines" "$bash_byLines"
   addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_git_override" "$bash_git_override"
 }
