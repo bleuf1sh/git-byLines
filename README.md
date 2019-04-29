@@ -1,5 +1,6 @@
 # git-byLines
-## Simple Git tool to ammend contributers onto a commit message requiring no special commands
+## Git tool to ammend contributers onto a commit message 
+## simply **git commit** as usual... no hard to remember commands
 copy/paste this line into terminal (bash) and run
 ```
 curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installByLines.sh?$(date +%s)" > installByLines.sh && bash installByLines.sh
