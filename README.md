@@ -8,9 +8,19 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 
 ![Demo](demo-images/demo_flow.png?raw=true "Demo")
 
+## Features
+- Intelligently add contributors using the *Authored-by* or *Co-authored-by* syntax based on selection count or if an *Authored-by* is already present
+- Prevents adding duplicate authors
+- Ability to disable for an individual repo
+- Remembers and Auto selects the previously used byLines
+- Displays a preview before ammending of the final commit message for confirmation
+- Currently supports adding up to 26 contributors
+- Python 2 and 3 compatible
+
 ## What makes this different than other approaches out there?
 There are no specific commands to remember or configurations to setup before use. 
 The code is triggered upon any **git commit** command performed within any git repo.
+Thereby achieving that natural flow similiar to signing your name after writing an email.
 
 ## How does it work?
 git-byLines overloads the git command via shell function and is triggered upon any **git commit** command. 
@@ -20,7 +30,7 @@ A config file named `.config.byLines.json` is automatically generated inside of 
 
 ## Manual Install
 1. Clone this repo do a directory of your choosing
-1. Look at `additionsToBashProfile.sh` for examples of the aliases to manually add to your shell
+1. Look at `additionsToBashProfile.sh` for examples of the functions to manually add (adapt) to your shell
 
 </br>
 
@@ -34,6 +44,8 @@ A config file named `.config.byLines.json` is automatically generated inside of 
 
 ######## BACKLOG ##########
 - Update ReadMe
+- Support for Fish shell
+- Windows support
 
 </br></br></br></br>
 ```
