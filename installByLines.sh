@@ -1,7 +1,7 @@
 #!/bin/bash
 # License located at https://github.com/bleuf1sh/git-byLines
 
-LOCAL_GIT_REPO='~/git-byLines'
+LOCAL_GIT_REPO=~/git-byLines
 
 function printBleuf1sh() {
   echo
