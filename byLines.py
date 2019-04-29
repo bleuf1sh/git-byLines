@@ -46,9 +46,9 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
 
   cliPrint('')
   cliPrint('last commit:' + commit_hash)
-  cliPrint('' + reset_colors())
+  cliPrint(reset_colors() + '', 0)
   cliPrint(up_fish, 0)
-  cliPrint("git-byLines makes it easy to add byLines to the most recent local commit")
+  cliPrint("git-byLines makes it easy to add byLines to the most recent local commit", 0)
   cliPrint(dn_fish, 0)
   
   repo_visible_configger = RepoConfigger()
