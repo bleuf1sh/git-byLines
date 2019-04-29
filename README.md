@@ -2,7 +2,7 @@
 ## Simple Git tool to ammend contributers onto a commit message requiring no special commands
 copy/paste this line into terminal (bash) and run
 ```
-TODO... for later
+curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installByLines.sh?$(date +%s)" > installByLines.sh && bash installByLines.sh
 ```
 
 
@@ -16,6 +16,9 @@ It can also be triggered manually via the shell alias **byLines**.
 
 A config file named **.config.byLines.json** is automatically generated inside of each repo and can be safely added to source control.
 
+## Manual Install
+1. Clone this repo do a directory of your choosing
+1. Look at additionsToBashProfile.sh for examples of the aliases to manually add to your shell
 
 </br>
 
