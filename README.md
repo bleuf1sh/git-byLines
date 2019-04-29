@@ -1,5 +1,5 @@
 # git-byLines
-## Simple and responsive Git tool to add all contributers into a commit message requiring no special commands
+## Simple Git tool to ammend contributers onto a commit message requiring no special commands
 copy/paste this line into terminal (bash) and run
 ```
 TODO... for later
@@ -8,10 +8,13 @@ TODO... for later
 
 ## What makes this different than other approaches out there?
 There are no specific commands to remember or configurations to setup before use. 
-The code is activated upon any "git commit" command within any git repo.
+The code is triggered upon any **git commit** command within any git repo.
 
 ## How does it work?
-git-byLines overloads the git command via shell alias.
+git-byLines overloads the git command via shell alias and is triggered upon any **git commit** command. 
+It can also be triggered manually via the shell alias **byLines**.
+
+A config file named **.config.byLines.json** is automatically generated inside of each repo and can be safely added to source control.
 
 
 </br>
@@ -25,8 +28,7 @@ git-byLines overloads the git command via shell alias.
 
 
 ######## BACKLOG ##########
-- Add dedicated manual activation
-- Quick option for most recently used byLines (specific to the machine)
+- Update ReadMe
 
 </br></br></br></br>
 ```

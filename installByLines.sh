@@ -9,6 +9,7 @@ function install() {
   fi
   
   echo "Found Python Ref:$python_ref"
+  $python_ref --version
 }
 
 install
