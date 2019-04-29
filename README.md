@@ -6,6 +6,7 @@ copy/paste this line into terminal (bash) and run
 curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installByLines.sh?$(date +%s)" > installByLines.sh && bash installByLines.sh
 ```
 
+![Demo](demo-images/demo_flow.png?raw=true "Demo")
 
 ## What makes this different than other approaches out there?
 There are no specific commands to remember or configurations to setup before use. 
