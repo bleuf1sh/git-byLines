@@ -6,7 +6,6 @@ import utils.utility_belt as uBelt
 import utils.utility_git as uGit
 from utils.utility_config import BaseConfigger
 from sys import argv as sys_argv, version as sys_version, exit as sys_exit
-from string import ascii_lowercase
 from os import linesep as os_linesep
 ### Python 2/3
 try:
@@ -67,15 +66,15 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
   while(isFlowActive):
     select_byline_prompt = ''
     if len(bylines) > 0:
-      select_byline_prompt = 'Select by letter or '
+      select_byline_prompt = 'Select by number or '
       cliPrint('')
-      cliPrint('Enter the letter to select a byLine:')
-      abc_list = list(ascii_lowercase)
+      cliPrint('Enter the number to select a byLine:')
+      abc123_list = list(range(1,len(bylines) + 1))
       for byline in bylines:
         if byline in selected_bylines:
-          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.BRIGHT + '  ✔' + ' (' + abc_list.pop(0) + ') ' + byline)
+          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.BRIGHT + '  ✔' + ' (' + str(abc123_list.pop(0)) + ') ' + byline)
         else:
-          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.NORMAL + '   ' + ' (' + abc_list.pop(0) + ') ' + byline)
+          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.NORMAL + '   ' + ' (' + str(abc123_list.pop(0)) + ') ' + byline)
     
     cliPrint(reset_colors())
     cliPrint(reset_colors() + select_byline_prompt + 'Type a new byLine like ' + txtStyle.BRIGHT + 'Your Name <git-email@github.com>')
@@ -84,18 +83,18 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
     selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
     if '' == selected_input:
       continue 
-    if ':x' == selected_input.lower():
+    if selected_input.lower() in ['x', ':x']:
       repo_hidden_configger.config_class.enabled = False
       repo_hidden_configger.saveConfigClassToJson()
       exitGracefully(0)
-    if ':q' == selected_input.lower():
+    if selected_input.lower() in ['q', ':q']:
       exitGracefully(0)
-    if ':a' == selected_input.lower():
+    if selected_input.lower() in ['a', ':a']:
       isFlowActive = False
-    elif len(selected_input) < 3:
-      tag_index = ascii_lowercase.find(selected_input.lower()[0])
+    elif selected_input.isdigit():
+      tag_index = selected_input.strip()
       try:
-        byline = bylines[tag_index]
+        byline = bylines[int(tag_index) - 1]
         if byline in selected_bylines:
           selected_bylines.remove(byline)
         else:
@@ -104,6 +103,7 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
         show_warning('byLine selection unknown, please try again or exit')
     else:
       bylines.append(selected_input)
+      bylines = sorted(bylines)
       selected_bylines.append(selected_input)
     
     cliPrint(sm_fish, 0)
