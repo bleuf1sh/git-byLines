@@ -131,9 +131,9 @@ def addByLineToCommit(commit_hash, bylines_to_add):
   ammended_commit_message = createAmmendedCommitMessage(commit_hash, bylines_to_add)
   cliPrint(reset_colors())
   cliPrint('Commit message after ammendement:')
-  cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX)
+  for line in ammended_commit_message.splitlines():
+    cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + line)
 
-  cliPrint(ammended_commit_message)
   cliPrint(reset_colors())
   selected_input = uBelt.getInput('Confirm the ammended commit message above? [y/N]: ')
   if selected_input.lower().startswith('n'):
@@ -148,13 +148,7 @@ def addByLineToCommit(commit_hash, bylines_to_add):
 def createAmmendedCommitMessage(commit_hash, bylines_to_add):
   # type: (str, List[str]) -> str
   commit_message = uGit.getGitCommitMessage(commit_hash)
-  # Attempt to detect existing newline char
-  if commit_message.find('\r\n'):
-    new_line_character = '\r\n'
-  elif commit_message.find('\n'):
-    new_line_character = '\n'
-  else:
-    new_line_character = os_linesep
+  new_line_character = getNewLineCharacter(commit_message)
 
   commit_message = commit_message + new_line_character
 
@@ -189,6 +183,17 @@ def show_warning(txt):
   # type: (str) -> None
   uBelt.log(reset_colors() + txtColor.LIGHTRED_EX + '!!! ' + txt + ' !!!' + reset_colors())
 
+def getNewLineCharacter(txt):
+  # type: (str) -> None
+  # Attempt to detect existing newline char
+  if txt.find('\r\n'):
+    new_line_character = '\r\n'
+  elif txt.find('\n'):
+    new_line_character = '\n'
+  else:
+    new_line_character = os_linesep
+  
+  return new_line_character
 
 
 class LocalRepoConfigClass(object):
