@@ -125,6 +125,8 @@ function install() {
     redColor
     echo 'Python PIP Not Found!'
     echo 'Go install it and then try again'
+    echo 'If you use brew then try reinstalling python... otherwise try this:'
+    echo "curl -sL \"https://bootstrap.pypa.io/get-pip.py\" > get-pip.py && $python_ref get-pip.py"
     resetColor
     exit 1
   fi

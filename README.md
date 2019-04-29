@@ -32,6 +32,10 @@ A config file named `.config.byLines.json` is automatically generated inside of 
 1. Clone this repo do a directory of your choosing
 1. Look at `additionsToBashProfile.sh` for examples of the functions to manually add (adapt) to your shell
 
+## Requirements
+- Python 2.7 and above
+- Pip
+
 ## TODO
 - Update ReadMe
 - Support for Fish shell
