@@ -1,6 +1,6 @@
 # git-byLines
-## Git tool to ammend contributers onto a commit message 
-## simply **git commit** as usual... no hard to remember commands
+## Addon to ammend mulitple contributers <br/>onto a commit message **git commit** as usual <br/>no hard to remember commands... it's that simple!
+
 copy/paste this line into terminal (bash) and run
 ```
 curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installByLines.sh?$(date +%s)" > installByLines.sh && bash installByLines.sh
@@ -9,17 +9,17 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 
 ## What makes this different than other approaches out there?
 There are no specific commands to remember or configurations to setup before use. 
-The code is triggered upon any **git commit** command within any git repo.
+The code is triggered upon any **git commit** command performed within any git repo.
 
 ## How does it work?
-git-byLines overloads the git command via shell alias and is triggered upon any **git commit** command. 
-It can also be triggered manually via the shell alias **byLines**.
+git-byLines overloads the git command via shell function and is triggered upon any **git commit** command. 
+It can also be triggered manually via the shell function **byLines**.
 
-A config file named **.config.byLines.json** is automatically generated inside of each repo and can be safely added to source control.
+A config file named `.config.byLines.json` is automatically generated inside of each repo and is reccomended to be added to source control.
 
 ## Manual Install
 1. Clone this repo do a directory of your choosing
-1. Look at additionsToBashProfile.sh for examples of the aliases to manually add to your shell
+1. Look at `additionsToBashProfile.sh` for examples of the aliases to manually add to your shell
 
 </br>
 
