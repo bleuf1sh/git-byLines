@@ -178,7 +178,7 @@ def cliPrint(text):
   print(text.ljust(84 + encoded_padding_diff))
 
 def reset_colors():
-  return txtStyle.NORMAL + txtColorBack.BLUE + txtColor.WHITE
+  return txtStyle.NORMAL + txtColorBack.LIGHTBLUE_EX + txtColor.WHITE
 
 def show_warning(txt):
   # type: (str) -> None
