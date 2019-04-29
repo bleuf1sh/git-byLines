@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 from __future__ import absolute_import, division, print_function, unicode_literals
-from local_pip.colorama import init as coloramaInit, Fore as txtColor , Back as txtColorBack, Style as txtStyle
+from local_pip.colorama import init as coloramaInit, deinit as coloramaResetAll, Fore as txtColor , Back as txtColorBack, Style as txtStyle
 import utils.utility_belt as uBelt
 import utils.utility_git as uGit
 from utils.utility_config import BaseConfigger
@@ -47,9 +47,9 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
   cliPrint('')
   cliPrint('last commit:' + commit_hash)
   cliPrint('' + reset_colors())
-  cliPrint(up_fish)
+  cliPrint(up_fish, 0)
   cliPrint("git-byLines makes it easy to add byLines to the most recent local commit")
-  cliPrint(dn_fish)
+  cliPrint(dn_fish, 0)
   
   repo_visible_configger = RepoConfigger()
   repo_visible_configger.loadJsonToConfigClass()
@@ -79,17 +79,17 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
     
     cliPrint(reset_colors())
     cliPrint(reset_colors() + select_byline_prompt + 'Type a new byLine like ' + txtStyle.BRIGHT + 'Your Name <git-email@github.com>')
-    cliPrint(reset_colors() + txtStyle.DIM + txtColor.BLACK + ':q Quit  :a Ammend commit  :disable Disable byLines')
+    cliPrint(reset_colors() + txtStyle.DIM + txtColor.BLACK + ':q Quit  :x Disable byLines  :a Ammend commit')
     cliPrint('')
     selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
     if '' == selected_input:
       continue 
-    if ':disable' == selected_input.lower():
+    if ':x' == selected_input.lower():
       repo_hidden_configger.config_class.enabled = False
       repo_hidden_configger.saveConfigClassToJson()
-      sys_exit(0)
+      exitGracefully(0)
     if ':q' == selected_input.lower():
-      sys_exit(0)
+      exitGracefully(0)
     if ':a' == selected_input.lower():
       isFlowActive = False
     elif len(selected_input) < 3:
@@ -106,7 +106,7 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
       bylines.append(selected_input)
       selected_bylines.append(selected_input)
     
-    cliPrint(sm_fish)
+    cliPrint(sm_fish, 0)
     cliPrint('')
   
   # Update config with any newly added byLines
@@ -129,7 +129,7 @@ def addByLineToCommit(commit_hash, bylines_to_add):
     return False
   
   ammended_commit_message = createAmmendedCommitMessage(commit_hash, bylines_to_add)
-  cliPrint(reset_colors() + txtColor.WHITE)
+  cliPrint(reset_colors())
   cliPrint('Commit message after ammendement:')
   cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX)
 
@@ -142,7 +142,7 @@ def addByLineToCommit(commit_hash, bylines_to_add):
 
   # Ammend the commit
   uGit.ammendCommitMessage(ammended_commit_message)
-  cliPrint('AMMEND DONE')
+  cliPrint('... DONE')
   return True
 
 def createAmmendedCommitMessage(commit_hash, bylines_to_add):
@@ -172,13 +172,18 @@ def createAmmendedCommitMessage(commit_hash, bylines_to_add):
   
   return commit_message
 
-def cliPrint(text):
-  # type: (str) -> None
+def exitGracefully(code=0):
+  print(txtStyle.RESET_ALL)
+  coloramaResetAll()
+  sys_exit(code)
+
+def cliPrint(text, left_margin_amount=1):
+  # type: (str, int) -> None
   encoded_padding_diff = len(text) - len(uBelt.ansi_strip(text))
-  print(text.ljust(84 + encoded_padding_diff))
+  print(''.ljust(left_margin_amount) + text.ljust(84 + encoded_padding_diff - left_margin_amount))
 
 def reset_colors():
-  return txtStyle.NORMAL + txtColorBack.LIGHTBLUE_EX + txtColor.WHITE
+  return txtStyle.NORMAL + txtColorBack.LIGHTBLACK_EX + txtColor.LIGHTWHITE_EX
 
 def show_warning(txt):
   # type: (str) -> None
