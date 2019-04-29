@@ -135,7 +135,7 @@ def addByLineToCommit(commit_hash, bylines_to_add):
 
   cliPrint(ammended_commit_message)
   cliPrint(reset_colors())
-  selected_input = uBelt.getInput('Confirm the ammended commit message above? [y/n]: ')
+  selected_input = uBelt.getInput('Confirm the ammended commit message above? [y/N]: ')
   if selected_input.lower().startswith('n'):
     show_warning('Ammend aborted')
     return False
