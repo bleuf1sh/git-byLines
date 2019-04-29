@@ -9,7 +9,7 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 ![Demo](demo-images/demo_flow.png?raw=true "Demo")
 
 ## Features
-- Intelligently add contributors using the *Authored-by* or *Co-authored-by* syntax based on selection count or if an *Authored-by* is already present
+- Intelligently add contributors using the *Authored-by* or *Co-authored-by*<br/> syntax based on selection count or if an *Authored-by* is already present
 - Prevents adding duplicate authors
 - Ability to disable for an individual repo
 - Remembers and Auto selects the previously used byLines
@@ -18,7 +18,7 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 - Python 2 and 3 compatible
 
 ## What makes this different than other approaches out there?
-There are no specific commands to remember or configurations to setup before use. 
+There are no specific commands to remember or configurations to setup before use.<br/>
 The code is triggered upon any **git commit** command performed within any git repo.
 Thereby achieving that natural flow similiar to signing your name after writing an email.
 
@@ -32,22 +32,19 @@ A config file named `.config.byLines.json` is automatically generated inside of 
 1. Clone this repo do a directory of your choosing
 1. Look at `additionsToBashProfile.sh` for examples of the functions to manually add (adapt) to your shell
 
-</br>
+## TODO
+- Update ReadMe
+- Support for Fish shell
+- Windows support
+<br/>
 
 ## Inspired by
 - https://github.com/pivotal/git-author
 - https://github.com/kejadlen/git-together
 - https://github.com/pivotal/git_scripts
 - https://github.com/git-duet/git-duet
-</br></br>
 
-
-######## BACKLOG ##########
-- Update ReadMe
-- Support for Fish shell
-- Windows support
-
-</br></br></br></br>
+<br/><br/><br/><br/>
 ```
 # MIT License
 
