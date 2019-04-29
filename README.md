@@ -1,5 +1,5 @@
 # git-byLines
-## Addon to ammend mulitple contributers <br/>into a commit message **git commit** as usual <br/>no hard to remember commands... it's that simple!
+## Easily add multiple contributors/authors to a Git commit. <br/>Simply **git commit** as usual... no hard to remember commands!
 
 copy/paste this line into terminal (bash) and run
 ```
