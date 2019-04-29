@@ -184,7 +184,7 @@ def show_warning(txt):
   uBelt.log(reset_colors() + txtColor.LIGHTRED_EX + '!!! ' + txt + ' !!!' + reset_colors())
 
 def getNewLineCharacter(txt):
-  # type: (str) -> None
+  # type: (str) -> str
   # Attempt to detect existing newline char
   if txt.find('\r\n'):
     new_line_character = '\r\n'
