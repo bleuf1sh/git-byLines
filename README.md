@@ -1,5 +1,5 @@
 # git-byLines
-## Addon to ammend mulitple contributers <br/>onto a commit message **git commit** as usual <br/>no hard to remember commands... it's that simple!
+## Addon to ammend mulitple contributers <br/>into a commit message **git commit** as usual <br/>no hard to remember commands... it's that simple!
 
 copy/paste this line into terminal (bash) and run
 ```
