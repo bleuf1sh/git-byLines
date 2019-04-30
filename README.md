@@ -17,6 +17,7 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 - Displays a preview before ammending of the final commit message for confirmation
 - Currently supports adding unlimited contributors
 - Python 2 and 3 compatible
+- **byLine** can be safely run back-to-back in case someone was forgotten
 
 ## What makes this different than other approaches out there?
 There are no specific commands to remember or configurations to setup before use.<br/>
