@@ -153,7 +153,7 @@ function install() {
   echo
   echo "Installing Dependencies..."
   pushd "$LOCAL_GIT_REPO"
-  $pip_ref install colorama --target ./local_pip
+  $pip_ref install colorama --upgrade --target ./local_pip
   popd
   echo "Installing Dependencies... Done"
 
