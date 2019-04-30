@@ -14,7 +14,7 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 - Ability to disable for an individual repo
 - Remembers and Auto selects the previously used byLines
 - Displays a preview before ammending of the final commit message for confirmation
-- Currently supports adding up to 26 contributors
+- Currently supports adding unlimited contributors
 - Python 2 and 3 compatible
 
 ## What makes this different than other approaches out there?
