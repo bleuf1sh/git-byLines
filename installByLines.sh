@@ -175,7 +175,7 @@ function install() {
 
   greenColor
   local bash_byLines="function byLines() { command $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; }"
-  local bash_git_override="function git() { command git \"\$@\" && $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; }"
+  local bash_git_override="function git() { command git \"\$@\" && byLines \"\$@\" ; }"
   addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_byLines" "$bash_byLines"
   addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_git_override" "$bash_git_override"
   resetColor

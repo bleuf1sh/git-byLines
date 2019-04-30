@@ -1,5 +1,5 @@
 # git-byLines
-## Easily add multiple contributors/authors to a Git commit. <br/>Simply **git commit** as usual... no hard to remember commands!
+## Easily add multiple contributors/authors/byLines to a recent Git commit. Simply **git commit** as usual... no hard to remember commands!
 
 copy/paste this line into terminal (bash) and run
 ```

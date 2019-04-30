@@ -23,13 +23,19 @@ def main(command):
   # type: (str) -> None
   coloramaInit()
 
-  repo_hidden_configger = LocalRepoConfigger()
-  repo_hidden_configger.loadJsonToConfigClass()
+  try:
+    repo_hidden_configger = LocalRepoConfigger() # throws if we are not in a Git repo
+    repo_hidden_configger.loadJsonToConfigClass() 
+  except:
+    uBelt.log('git-byLines can only run within a Git repo', isVerbose=True)
+    exit(0)
+
   if command is COMMAND_COMMIT and repo_hidden_configger.config_class.enabled is False:
     uBelt.log('git-byLines is disabled per RepoHiddenConfigger', isVerbose=True)
     exit(0)
 
   last_commit_hash = uGit.getGitCommitHash()
+    
   # Run this all the time after each command trigger (used to be only after a recent commit)
   if True or (uBelt.getCurrentTimeEpochMs() - uGit.getGitCommitEpochMs(last_commit_hash)) >= 10000:
     triggerByLineWorkFlow(repo_hidden_configger, last_commit_hash)
@@ -39,15 +45,15 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
   # type: (LocalRepoConfigger, str) -> None
   uBelt.log('triggerByLineWorkFlow() ' + commit_hash, isVerbose=True)
 
-  up_fish = '´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·><(((º>'
-  dn_fish = '¸.·´¯`·.¸¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.><(((º>'
+  up_fish = '´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·><(((º>'
+  dn_fish = '.·´¯`·.¸¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·><(((º>'
   sm_fish = '´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.·´¯`·.¸.><(((º>'
 
   cliPrint('')
-  cliPrint('last commit:' + commit_hash)
-  cliPrint(reset_colors() + '', 0)
+  uBelt.log('last commit:' + commit_hash, isVerbose=True)
+  cliPrint(reset_colors() + txtStyle.BRIGHT + "git-byLines", 0)
   cliPrint(up_fish, 0)
-  cliPrint("git-byLines makes it easy to add byLines to the most recent local commit", 0)
+  cliPrint(reset_colors() + "Easily add multiple contributors/authors/byLines to a recent Git commit.", 0)
   cliPrint(dn_fish, 0)
   
   repo_visible_configger = RepoConfigger()
@@ -66,19 +72,20 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
   while(isFlowActive):
     select_byline_prompt = ''
     if len(bylines) > 0:
-      select_byline_prompt = 'Select by number or '
+      select_byline_prompt = 'or '
       cliPrint('')
-      cliPrint('Enter the number to select a byLine:')
+      cliPrint('Enter the number to toggle selection:')
       abc123_list = list(range(1,len(bylines) + 1))
-      for byline in bylines:
+      for num, byline in enumerate(bylines, start=1):
+        radio_selection_num = ' (' + str(num) + ') '
         if byline in selected_bylines:
-          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.BRIGHT + '  ✔' + ' (' + str(abc123_list.pop(0)) + ') ' + byline)
+          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.BRIGHT + '  ✔' + radio_selection_num + byline)
         else:
-          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.NORMAL + '   ' + ' (' + str(abc123_list.pop(0)) + ') ' + byline)
+          cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.NORMAL + '   ' + radio_selection_num + byline)
     
     cliPrint(reset_colors())
-    cliPrint(reset_colors() + select_byline_prompt + 'Type a new byLine like ' + txtStyle.BRIGHT + 'Your Name <git-email@github.com>')
-    cliPrint(reset_colors() + txtStyle.DIM + txtColor.BLACK + ':q Quit  :x Disable byLines  :a Ammend commit')
+    cliPrint(reset_colors() + select_byline_prompt + 'Type a new byLine like ' + txtStyle.BRIGHT + 'Your Name <git-email@example.com>')
+    cliPrint(reset_colors() + txtStyle.DIM + txtColor.BLACK + ':q Quit/Cancel  :x Disable byLines  :a Ammend commit')
     cliPrint('')
     selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
     if '' == selected_input:
@@ -100,7 +107,11 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
         else:
           selected_bylines.append(byline)
       except IndexError:
-        show_warning('byLine selection unknown, please try again or exit')
+        show_warning("number selection didn't match a byLine, please try again or exit")
+        showPressAnyKeyToContinue()
+    elif len(selected_input) <= 4:
+      show_warning('unknown command and assumed too short to be a new byLine')
+      showPressAnyKeyToContinue()
     else:
       bylines.append(selected_input)
       bylines = sorted(bylines)
@@ -171,17 +182,21 @@ def exitGracefully(code=0):
   coloramaResetAll()
   sys_exit(code)
 
+def showPressAnyKeyToContinue():
+  cliPrint('')
+  any_key = uBelt.getInput(reset_colors() + '----------------------  PRESS ANY KEY TO CONTINUE  ----------------------')
+
 def cliPrint(text, left_margin_amount=1):
   # type: (str, int) -> None
   encoded_padding_diff = len(text) - len(uBelt.ansi_strip(text))
-  print(''.ljust(left_margin_amount) + text.ljust(84 + encoded_padding_diff - left_margin_amount))
+  print(''.ljust(left_margin_amount) + text.ljust(79 + encoded_padding_diff - left_margin_amount))
 
 def reset_colors():
   return txtStyle.NORMAL + txtColorBack.LIGHTBLACK_EX + txtColor.LIGHTWHITE_EX
 
 def show_warning(txt):
   # type: (str) -> None
-  uBelt.log(reset_colors() + txtColor.LIGHTRED_EX + '!!! ' + txt + ' !!!' + reset_colors())
+  cliPrint(reset_colors() + txtColor.LIGHTMAGENTA_EX + '!!! ' + txt + ' !!!' + reset_colors(), 0)
 
 def getNewLineCharacter(txt):
   # type: (str) -> str
