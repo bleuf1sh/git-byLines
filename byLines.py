@@ -121,12 +121,17 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
     cliPrint('')
   
   # Update config with any newly added byLines
+  did_add_byline = False
   for byline in bylines:
     if byline not in repo_visible_configger.config_class.byLines:
+      did_add_byline = True
       repo_visible_configger.config_class.byLines.append(byline)
 
-  repo_visible_configger.saveConfigClassToJson()
+  if did_add_byline: # Only save if a change was actually made
+    repo_visible_configger.saveConfigClassToJson()
+  
   did_ammend = addByLineToCommit(commit_hash, selected_bylines)
+
   if did_ammend is True:
     repo_hidden_configger.config_class.lastByLines = selected_bylines
     repo_hidden_configger.saveConfigClassToJson()
@@ -178,11 +183,13 @@ def createAmmendedCommitMessage(commit_hash, bylines_to_add):
   return commit_message
 
 def exitGracefully(code=0):
+  # type: (int) -> None
   print(txtStyle.RESET_ALL)
   coloramaResetAll()
   sys_exit(code)
 
 def showPressAnyKeyToContinue():
+  # type: () -> None
   cliPrint('')
   any_key = uBelt.getInput(reset_colors() + '----------------------  PRESS ANY KEY TO CONTINUE  ----------------------')
 
@@ -210,7 +217,8 @@ def getNewLineCharacter(txt):
   
   return new_line_character
 
-
+##########################################################
+# This config object is NOT safe to be added to source control
 class LocalRepoConfigClass(object):
   def __init__(self):
     self.enabled = True # type: bool
@@ -225,8 +233,10 @@ class LocalRepoConfigger(BaseConfigger) :
     self.json_file_name = '.config.byLines.local.json' # type: str
     self.file_path_segments = [ uGit.getGitTopLevelDir(), '.git', self.json_file_name ] # type: List[str]
     self.config_class = LocalRepoConfigClass() # type: LocalRepoConfigClass
+##########################################################
 
-
+##########################################################
+# This config object is safe to be added to source control
 class RepoConfigClass(object):
   def __init__(self):
     self.byLines = [] # type: List[str]
@@ -240,7 +250,7 @@ class RepoConfigger(BaseConfigger) :
     self.json_file_name = '.config.byLines.json' # type: str
     self.file_path_segments = [ uGit.getGitTopLevelDir(), self.json_file_name ] # type: List[str]
     self.config_class = RepoConfigClass() # type: RepoConfigClass
-
+##########################################################
 
 
 if __name__ == "__main__":
