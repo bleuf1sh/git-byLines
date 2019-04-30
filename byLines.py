@@ -90,6 +90,8 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
     selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
     if '' == selected_input:
       continue 
+    if selected_input.lower().startswith('git '):
+      continue
     if selected_input.lower() in ['x', ':x']:
       repo_hidden_configger.config_class.enabled = False
       repo_hidden_configger.saveConfigClassToJson()
