@@ -62,7 +62,7 @@ function addTextIfKeywordNotExistToFile() {
     touch $file
   fi
 
-  if grep -q "$keyword" $file; then
+  if grep -q -z "$keyword" $file; then
     echo "$keyword already exists in $file: $line_to_add"
   else
     echo "adding to $file: $line_to_add"
