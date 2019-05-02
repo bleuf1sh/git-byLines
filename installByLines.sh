@@ -89,7 +89,9 @@ function cloneGitRepo() {
     popd
   fi
 
+  pushd "$LOCAL_GIT_REPO"
   git checkout "$git_branch"
+  popd
 
   greenColor
   echo 
