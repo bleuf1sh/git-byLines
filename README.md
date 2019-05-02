@@ -10,8 +10,8 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 ![Demo](demo-images/demo_flow.png?raw=true "Demo")
 
 ## Usage
-- Runs automatically after any  `git commit`  shell command
-- Invoke directly with the  `byLines`  shell command
+- Runs automatically after any  **git commit**  shell command
+- Invoke directly with the  **byLines**  shell command
 
 ## Features
 - Intelligently add contributors using the *Authored-by* or *Co-authored-by*<br/> syntax based on selection count or if an *Authored-by* is already present
