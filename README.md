@@ -40,7 +40,7 @@ A config file named `.config.byLines.json` is automatically generated inside of 
 - Pip
 
 ## TODO
-- Update ReadMe
+- Add auto-update ability
 - Support for Fish shell
 - Windows support
 <br/>
