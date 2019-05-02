@@ -14,21 +14,22 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 - Prevents adding duplicate authors
 - Ability to disable for an individual repo
 - Remembers and Auto selects the previously used byLines
-- Displays a preview before ammending of the final commit message for confirmation
+- Displays a preview before amending of the final commit message for confirmation
 - Currently supports adding unlimited contributors
 - Python 2 and 3 compatible
+- Uses a local dependency folder to not clutter your global Python dependencies
 - **byLine** can be safely run back-to-back in case someone was forgotten
 
 ## What makes this different than other approaches out there?
 There are no specific commands to remember or configurations to setup before use.<br/>
 The code is triggered upon any **git commit** command performed within any git repo.
-Thereby achieving that natural flow similiar to signing your name after writing an email.
+Thereby achieving that natural flow similar to signing your name after writing an email.
 
 ## How does it work?
 git-byLines overloads the git command via shell function and is triggered upon any **git commit** command. 
 It can also be triggered manually via the shell function **byLines**.
 
-A config file named `.config.byLines.json` is automatically generated inside of each repo and is reccomended to be added to source control.
+A config file named `.config.byLines.json` is automatically generated inside of each repo and is recommended to be added to source control.
 
 ## Manual Install
 1. Clone this repo do a directory of your choosing
