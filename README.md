@@ -55,6 +55,7 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 - Windows support
 - (DONE) ReCycle the prompts when not amending
 - (DONE) Support for Fish shell
+- (DONE) Support when commands are missing the leading colon
 - (DONE) Isolate selections to numbers and commands to letters
 - (DONE) Remember recently used byLines
 - (DONE) Double author protection

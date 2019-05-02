@@ -96,7 +96,7 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
       repo_hidden_configger.config_class.enabled = False
       repo_hidden_configger.saveConfigClassToJson()
       exitGracefully(0)
-    if selected_input.lower() in ['q', ':q']:
+    if selected_input.lower() in ['q', ':q', 'c', ':c']:
       exitGracefully(0)
     if selected_input.lower() in ['a', ':a']:
       isFlowActive = False
