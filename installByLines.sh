@@ -186,14 +186,14 @@ function install() {
 
   greenColor
   local bash_byLines="
-  function byLines() { 
-    command $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; 
-  }
+function byLines() { 
+  command $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; 
+}
   "
   local bash_git_override="
-  function git() { 
-    command git \"\$@\" && byLines \"\$@\" ; 
-  }
+function git() { 
+  command git \"\$@\" && byLines \"\$@\" ; 
+}
   "
   addTextIfKeywordNotExistToFile $path_to_bash_profile "function byLines()" "$bash_byLines"
   addTextIfKeywordNotExistToFile $path_to_bash_profile "function git()" "$bash_git_override"
@@ -206,14 +206,14 @@ function install() {
   addTextIfKeywordNotExistToFile $path_to_fish_config "$fish_source_bleufish_config" "$fish_source_bleufish_config"
 
   local fish_byLines="
-  function byLines --description 'git-byLines'
-    command $python_ref $LOCAL_GIT_REPO/byLines.py \$argv; 
-  end
+function byLines --description 'git-byLines'
+  command $python_ref $LOCAL_GIT_REPO/byLines.py \$argv; 
+end
   "
   local fish_git_override="
-  function git --description 'git-byLines override'
-    command git \$argv && byLines \$argv; 
-  end
+function git --description 'git-byLines override'
+  command git \$argv && byLines \$argv; 
+end
   "
   
   local path_to_bleufish_config=~/.config/fish/bleuf1sh.fish
