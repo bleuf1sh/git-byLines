@@ -62,7 +62,7 @@ function addTextIfKeywordNotExistToFile() {
     touch $file
   fi
 
-  if grep -q -z "$keyword" $file; then
+  if grep -q "$keyword" $file; then
     echo "$keyword already exists in $file: $line_to_add"
   else
     echo "adding to $file: $line_to_add"
@@ -195,8 +195,8 @@ function install() {
     command git \"\$@\" && byLines \"\$@\" ; 
   }
   "
-  addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_byLines" "$bash_byLines"
-  addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_git_override" "$bash_git_override"
+  addTextIfKeywordNotExistToFile $path_to_bash_profile "function byLines()" "$bash_byLines"
+  addTextIfKeywordNotExistToFile $path_to_bash_profile "function git()" "$bash_git_override"
   # END BASH INSTALLATION
   
   # START FISH INSTALLATION
@@ -217,8 +217,8 @@ function install() {
   "
   
   local path_to_bleufish_config=~/.config/fish/bleuf1sh.fish
-  addTextIfKeywordNotExistToFile $path_to_bleufish_config "$fish_byLines" "$fish_byLines"
-  addTextIfKeywordNotExistToFile $path_to_bleufish_config "$fish_git_override" "$fish_git_override"
+  addTextIfKeywordNotExistToFile $path_to_bleufish_config "function byLines --description 'git-byLines'" "$fish_byLines"
+  addTextIfKeywordNotExistToFile $path_to_bleufish_config "function git --description 'git-byLines override'" "$fish_git_override"
   # END BASH INSTALLATION
 
   resetColor
