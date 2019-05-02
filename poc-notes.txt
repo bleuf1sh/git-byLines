@@ -1,0 +1,12 @@
+
+function git() {
+    echo "Overloaded git: $@"
+    local PREVIOUS_COMMIT=$(command git log -n 1 --pretty=format:"%H")||none
+    command git $@
+    local CURRENT_COMMIT=$(command git log -n 1 --pretty=format:"%H")||none
+
+    echo "B: $PREVIOUS_COMMIT"
+    echo "A: $CURRENT_COMMIT"
+    [ "$PREVIOUS_COMMIT" == "$CURRENT_COMMIT" ] && echo "No commit happened"
+    python ~/git-autograph.py "$CURRENT_COMMIT"
+}
