@@ -53,11 +53,14 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 ## TODO
 - Add auto-update ability
 - Windows support
+- (DONE) ReCycle the prompts when not amending
 - (DONE) Support for Fish shell
+- (DONE) Isolate selections to numbers and commands to letters
 - (DONE) Remember recently used byLines
 - (DONE) Double author protection
 - (DONE) Toggle selection of byLines
 - (DONE) Add easy one line installer
+- (DONE) Develop PoC amend post commit approach
 <br/>
 
 ## Inspired by

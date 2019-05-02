@@ -137,6 +137,9 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
   if did_ammend is True:
     repo_hidden_configger.config_class.lastByLines = selected_bylines
     repo_hidden_configger.saveConfigClassToJson()
+  else:
+    triggerByLineWorkFlow(repo_hidden_configger, commit_hash)
+
 
 
 def addByLineToCommit(commit_hash, bylines_to_add):
