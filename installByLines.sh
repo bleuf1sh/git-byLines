@@ -74,7 +74,7 @@ function addTextIfKeywordNotExistToFile() {
 function cloneGitRepo() {
   local git_branch=$1
   echo
-  echo "Clone Git Repo..."
+  echo "Clone Git Repo... $git_branch"
   
   if [ ! -d "$LOCAL_GIT_REPO" ]; then
     mkdir -p "$LOCAL_GIT_REPO"
@@ -84,6 +84,14 @@ function cloneGitRepo() {
   else
     echo
     echo "Syncing Git Repo..."
+    {
+      pushd "$LOCAL_GIT_REPO"
+      git checkout "$git_branch"
+      popd
+    } || {
+      echo "An error occured changing to branch: $git_branch"
+      echo "Moving on with business as usual... we'll try again later"
+    }
     pushd "$LOCAL_GIT_REPO"
     git pull -r
     popd
