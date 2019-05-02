@@ -52,8 +52,12 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 
 ## TODO
 - Add auto-update ability
-- Support for Fish shell
 - Windows support
+- (DONE) Support for Fish shell
+- (DONE) Remember recently used byLines
+- (DONE) Double author protection
+- (DONE) Toggle selection of byLines
+- (DONE) Add easy one line installer
 <br/>
 
 ## Inspired by
