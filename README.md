@@ -43,6 +43,13 @@ A config file named `.config.byLines.json` is automatically generated inside of 
 - Python 2.7 and above
 - Pip
 
+## Test Installation of Custom Branch
+Replace **master** with custom branch name
+```
+curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installByLines.sh?$(date +%s)" > installByLines.sh && bash installByLines.sh "master"
+```
+
+
 ## TODO
 - Add auto-update ability
 - Support for Fish shell
