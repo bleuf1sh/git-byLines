@@ -9,6 +9,10 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 
 ![Demo](demo-images/demo_flow.png?raw=true "Demo")
 
+## Usage
+- Runs automatically after any  `git commit`  shell command
+- Invoke directly with the  `byLines`  shell command
+
 ## Features
 - Intelligently add contributors using the *Authored-by* or *Co-authored-by*<br/> syntax based on selection count or if an *Authored-by* is already present
 - Prevents adding duplicate authors
@@ -27,12 +31,12 @@ Thereby achieving that natural flow similar to signing your name after writing a
 
 ## How does it work?
 git-byLines overloads the git command via shell function and is triggered upon any **git commit** command. 
-It can also be triggered manually via the shell function **byLines**.
+<br/>It can also be triggered manually via the shell function **byLines**.
 
 A config file named `.config.byLines.json` is automatically generated inside of each repo and is recommended to be added to source control.
 
 ## Manual Install
-1. Clone this repo do a directory of your choosing
+1. Clone this repo to a directory of your choosing
 1. Look at `additionsToBashProfile.sh` for examples of the functions to manually add (adapt) to your shell
 
 ## Requirements
