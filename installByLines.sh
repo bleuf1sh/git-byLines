@@ -70,7 +70,9 @@ function addTextIfKeywordNotExistToFile() {
   fi
 }
 
+# usage: cloneGitRepo 'branch name' 
 function cloneGitRepo() {
+  local git_branch=$1
   echo
   echo "Clone Git Repo..."
   
@@ -87,13 +89,19 @@ function cloneGitRepo() {
     popd
   fi
 
+  git checkout "$git_branch"
+
   greenColor
   echo 
   echo "Clone Git Repo... Done"
   resetColor
 }
 
+# usage: install 'git branch name' 
 function install() {
+  local git_branch=$1
+  echo "Installing from git branch: $git_branch"
+
   # Find Python
   local python_ref=""
   if [ $(which python3) ]; then
@@ -147,7 +155,7 @@ function install() {
   fi
 
   # Clone the GIT repo
-  cloneGitRepo
+  cloneGitRepo "$git_branch"
 
   # Install dependencies using PIP
   echo
@@ -157,6 +165,7 @@ function install() {
   popd
   echo "Installing Dependencies... Done"
 
+  # START BASH INSTALLATION
   local path_to_bash_profile=~/.bash_profile
   if [ -e $path_to_bash_profile ]; then
     if grep -q "git-byLines" $path_to_bash_profile; then
@@ -174,10 +183,42 @@ function install() {
   fi
 
   greenColor
-  local bash_byLines="function byLines() { command $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; }"
-  local bash_git_override="function git() { command git \"\$@\" && byLines \"\$@\" ; }"
+  local bash_byLines="
+  function byLines() { 
+    command $python_ref $LOCAL_GIT_REPO/byLines.py \"\$@\" ; 
+  }
+  "
+  local bash_git_override="
+  function git() { 
+    command git \"\$@\" && byLines \"\$@\" ; 
+  }
+  "
   addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_byLines" "$bash_byLines"
   addTextIfKeywordNotExistToFile $path_to_bash_profile "$bash_git_override" "$bash_git_override"
+  # END BASH INSTALLATION
+  
+  # START FISH INSTALLATION
+  mkdir -p ~/.config/fish
+  local path_to_fish_config=~/.config/fish/config.fish  
+  local fish_source_bleufish_config="source ~/.config/fish/bleuf1sh.fish"
+  addTextIfKeywordNotExistToFile $path_to_fish_config "$fish_source_bleufish_config" "$fish_source_bleufish_config"
+
+  local fish_byLines="
+  function byLines --description 'git-byLines'
+    command $python_ref $LOCAL_GIT_REPO/byLines.py \$argv; 
+  end
+  "
+  local fish_git_override="
+  function git --description 'git-byLines override'
+    command git \$argv && byLines \$argv; 
+  end
+  "
+  
+  local path_to_bleufish_config=~/.config/fish/bleuf1sh.fish
+  addTextIfKeywordNotExistToFile $path_to_bleufish_config "$fish_byLines" "$fish_byLines"
+  addTextIfKeywordNotExistToFile $path_to_bleufish_config "$fish_git_override" "$fish_git_override"
+  # END BASH INSTALLATION
+
   resetColor
 }
 
@@ -216,7 +257,10 @@ function intro() {
 set -e
 trap onSigterm SIGKILL SIGTERM
 
-intro && install
+default_git_branch="master"
+git_branch=${1:-$default_git_branch}   # Defaults to master
+
+intro && install "$git_branch"
 greenColor
 echo 'Installation done! Enjoy!'
 resetColor
