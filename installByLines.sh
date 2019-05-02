@@ -89,9 +89,14 @@ function cloneGitRepo() {
     popd
   fi
 
-  pushd "$LOCAL_GIT_REPO"
-  git checkout "$git_branch"
-  popd
+  {
+    pushd "$LOCAL_GIT_REPO"
+    git checkout "$git_branch"
+    popd
+  } || {
+    echo "An error occured changing to branch: $git_branch"
+    echo "Moving on with business as usual"
+  }
 
   greenColor
   echo 
