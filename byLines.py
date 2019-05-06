@@ -84,8 +84,8 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
           cliPrint(reset_colors() + txtColor.LIGHTYELLOW_EX + txtStyle.NORMAL + '   ' + radio_selection_num + byline)
     
     cliPrint(reset_colors())
-    cliPrint(reset_colors() + select_byline_prompt + 'Type a new byLine like ' + txtStyle.BRIGHT + 'Your Name <git-email@example.com>')
-    cliPrint(reset_colors() + txtStyle.DIM + txtColor.BLACK + ':q Quit/Cancel  :x Disable byLines  :a Ammend commit')
+    cliPrint(reset_colors() + select_byline_prompt + 'Type a new byLine like ' + txtStyle.BRIGHT + '"Robin Hood <free@goodwill.com>"')
+    cliPrint(reset_colors() + txtColor.BLACK + ':q Quit/Cancel  :x Disable byLines  :a Ammend commit')
     cliPrint('')
     selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
     if '' == selected_input:
@@ -115,9 +115,10 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
       show_warning('unknown command and assumed too short to be a new byLine')
       showPressAnyKeyToContinue()
     else:
-      bylines.append(selected_input)
+      cleaned_input = selected_input.replace('"', '')
+      bylines.append(cleaned_input)
       bylines = sorted(bylines)
-      selected_bylines.append(selected_input)
+      selected_bylines.append(cleaned_input)
     
     cliPrint(sm_fish, 0)
     cliPrint('')
@@ -257,6 +258,14 @@ class RepoConfigger(BaseConfigger) :
     self.config_class = RepoConfigClass() # type: RepoConfigClass
 ##########################################################
 
+def isFlagInArgs(flag, args):
+  # type: (str, List[str]) -> bool
+  for arg in args:
+    if arg.lower().strip().startswith(flag):
+      return True
+  
+  return False
+
 
 if __name__ == "__main__":
   uBelt.log('Python Version:' + sys_version, isVerbose=True)
@@ -266,13 +275,13 @@ if __name__ == "__main__":
   if len(args) >= 2:
     switch_arg = args[1].lower().strip()
     uBelt.log('SwitchArg:' + switch_arg, isVerbose=True)
+    
+    if isFlagInArgs('--help', args) or isFlagInArgs('--amend', args) or isFlagInArgs('--dry-run', args) or isFlagInArgs('-z', args) or isFlagInArgs('--null', args):
+      uBelt.log('Not triggering...', isVerbose=True)
 
-    if 'commit' == switch_arg:
+    elif 'commit' == switch_arg:
       main(COMMAND_COMMIT)
   
   else:
     main(COMMAND_DIRECT)
-
-
-
 
