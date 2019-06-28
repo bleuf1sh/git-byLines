@@ -14,6 +14,8 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 - Invoke directly with the  **byLines**  shell command
 
 ## Features
+- Super lightweight (just bash and python)
+- Easy 1 handed install
 - Intelligently add contributors using the *Authored-by* or *Co-authored-by*<br/> syntax based on selection count or if an *Authored-by* is already present
 - Prevents adding duplicate authors
 - Ability to disable for an individual repo
@@ -51,8 +53,8 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 
 
 ## TODO
-- Add auto-update ability
-- Windows support
+- Add ability to notify that an update is available
+- Windows (PowerShell or CMD) support
 - (DONE) ReCycle the prompts when not amending
 - (DONE) Support for Fish shell
 - (DONE) Support when commands are missing the leading colon
@@ -69,7 +71,7 @@ curl -sL "https://raw.githubusercontent.com/bleuf1sh/git-byLines/master/installB
 - https://github.com/kejadlen/git-together
 - https://github.com/pivotal/git_scripts
 - https://github.com/git-duet/git-duet
-
+- https://github.com/pivotal-legacy/git_scripts (git pair)
 <br/><br/><br/><br/>
 ```
 # MIT License
