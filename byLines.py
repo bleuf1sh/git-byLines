@@ -165,7 +165,7 @@ def addByLineToCommit(commit_hash, bylines_to_add):
 
   # Ammend the commit
   uGit.ammendCommitMessage(ammended_commit_message)
-  cliPrint('... DONE')
+  cliPrint('... AMMEND DONE :D')
   return True
 
 def createAmmendedCommitMessage(commit_hash, bylines_to_add):
