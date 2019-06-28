@@ -88,8 +88,9 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
     cliPrint(reset_colors() + txtColor.BLACK + ':q Quit/Cancel  :x Disable byLines  :a Ammend commit')
     cliPrint('')
     selected_input = uBelt.getInput(reset_colors() + '-> ').strip()
-    if '' == selected_input:
-      continue 
+    
+    if len(selected_input) == 0 and len(selected_bylines) == 0:
+      continue
     if selected_input.lower().startswith('git '):
       continue
     if selected_input.lower() in ['x', ':x']:
@@ -98,7 +99,7 @@ def triggerByLineWorkFlow(repo_hidden_configger, commit_hash):
       exitGracefully(0)
     if selected_input.lower() in ['q', ':q', 'c', ':c']:
       exitGracefully(0)
-    if selected_input.lower() in ['a', ':a']:
+    if selected_input.lower() in ['a', ':a', 'y', ':y'] or (len(selected_input) == 0 and len(selected_bylines) >= 1):
       isFlowActive = False
     elif selected_input.isdigit():
       tag_index = selected_input.strip()
